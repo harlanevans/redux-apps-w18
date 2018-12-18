@@ -1,13 +1,20 @@
 import React from "react";
 import AppForm from "./AppForm";
+import { deleteApp, } from "../reducers/apps";
 import { connect, } from "react-redux";
-import { Divider, Header, Image, Container, Table, Button, } from "semantic-ui-react";
+import {  Header, Image, Container, Table, Button, } from "semantic-ui-react";
 import { Link, } from "react-router-dom";
 
 class AppView extends React.Component {
   state = { showForm: false, };
 
   toggleForm = () => this.setState({ showForm: !this.state.showForm, });
+
+  handleDelete = () => {
+    const { app, dispatch, history: { push, }, } = this.props;
+    dispatch(deleteApp(app.id));
+    push("/apps");
+  }
 
   render() {
     const { showForm, } = this.state;
@@ -16,8 +23,11 @@ class AppView extends React.Component {
     return (
       <Container>
         <Link to="/apps">View All Apps</Link>
-        <Button onClick={this.toggleForm}>
+        <Button color="blue" onClick={this.toggleForm}>
           { showForm ? "Cancel" : "Edit" }
+        </Button>
+        <Button color="red" onClick={this.handleDelete}>
+          Delete
         </Button>
         {
           showForm ? 
